@@ -1,7 +1,10 @@
 package org.gradle;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 /*
  * Sample Gradle project with build script that can be used
@@ -15,8 +18,13 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan(basePackages="org.gradle")
+@PropertySource("classpath:application-dev.properties")
 public class AppConfig {
 
-	
+	//To resolve ${} in @Value
+		@Bean
+		public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
+			return new PropertySourcesPlaceholderConfigurer();
+		}
 	
 }

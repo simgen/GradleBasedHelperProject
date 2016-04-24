@@ -17,6 +17,13 @@ public class MainApp {
 		User user2=context.getBean(User.class);
 		// Since Spring beans are Singletons by default, we will get user1 bean data to be printed below.
 		System.out.println(user2);
+		SampleRabbitReportingCollectionManager prm = (SampleRabbitReportingCollectionManager)context.getBean("reporting");
+		try {
+			prm.generateReportingServiceData();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

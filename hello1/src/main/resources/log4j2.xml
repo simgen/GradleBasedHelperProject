@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Properties>
+		<Property name="PID">????</Property>
+		<Property name="LOG_PATTERN">[%d{yyyy-MM-dd HH:mm:ss.SSS}]
+			log4j2%X{context} - ${sys:PID} %5p [%t] --- %c{1}: %m%n</Property>
+		<Property name="logPath">${sys:catalina.base}/logs/rabbit-reporting-manager</Property>
+	</Properties>
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT" follow="true">
+			<PatternLayout pattern="${LOG_PATTERN}" />
+		</Console>
+		<RollingRandomAccessFile name="RollingFile"
+			fileName="${sys:logPath}/rabbit-reporting-manager.log"
+			filePattern="${sys:logPath}/logs/prepaid-data-consumer/$${date:yyyy-MM}/rabbit-reporting-manager-%d{MM-dd-yyyy}-%i.log.gz"
+			immediateFlush="true" append="true">
+			<PatternLayout pattern="${LOG_PATTERN}" />
+			<Policies>
+				<OnStartupTriggeringPolicy />
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+				<SizeBasedTriggeringPolicy size="20 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="30" />
+		</RollingRandomAccessFile>
+		<Async name="Async">
+			<AppenderRef ref="RollingFile" />
+			<AppenderRef ref="Console" />
+		</Async>
+	</Appenders>
+
+	<Loggers>
+		<Logger name="org.hibernate.validator.internal.util.Version"
+			level="warn">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="RollingFile" />
+		</Logger>
+		<Logger name="org.apache.coyote.http11.Http11NioProtocol"
+			level="warn">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="RollingFile" />
+		</Logger>
+		<Logger name="org.apache.tomcat.util.net.NioSelectorPool"
+			level="warn">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="RollingFile" />
+		</Logger>
+		<Logger name="org.apache.catalina.startup.DigesterFactory"
+			level="error">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="RollingFile" />
+		</Logger>
+
+		<Root level="warn">
+			<AppenderRef ref="Async" />
+		</Root>
+	</Loggers>
+</Configuration>
